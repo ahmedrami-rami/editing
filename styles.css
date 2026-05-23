@@ -900,36 +900,56 @@ button {
 }
 
 /* ===========================
-   CUSTOM CURSOR
+   CUSTOM CURSOR (arrow + pointer)
 =========================== */
-.cursor,
-.cursor-dot {
+.cursor {
   position: fixed;
+  top: 0;
+  left: 0;
   pointer-events: none;
   z-index: 9999;
-  border-radius: 50%;
-  mix-blend-mode: difference;
+  width: 0;
+  height: 0;
+  will-change: transform;
 }
 
-.cursor {
-  width: 32px;
-  height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  transform: translate(-50%, -50%);
-  transition: width 0.3s var(--ease), height 0.3s var(--ease), background 0.3s var(--ease);
+.cursor svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  transition: opacity 0.25s var(--ease), transform 0.35s var(--ease-spring);
+  filter: drop-shadow(0 0 6px rgba(57, 255, 20, 0.55))
+          drop-shadow(0 0 14px rgba(57, 255, 20, 0.25));
 }
 
-.cursor-dot {
-  width: 4px;
-  height: 4px;
-  background: white;
-  transform: translate(-50%, -50%);
+/* Arrow shown by default, pointer hidden */
+.cursor .cursor-arrow {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.cursor.hover {
-  width: 60px;
-  height: 60px;
-  background: rgba(255, 255, 255, 0.1);
+.cursor .cursor-pointer {
+  opacity: 0;
+  transform: scale(0.6);
+  /* shift pointer so its visual center sits on the cursor point */
+  margin: -8px 0 0 -8px;
+}
+
+/* When hovering interactive elements, swap to pointer */
+.cursor.hover .cursor-arrow {
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.cursor.hover .cursor-pointer {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* When clicking, squish */
+.cursor.down svg {
+  transform: scale(0.85);
 }
 
 /* ===========================
@@ -948,7 +968,7 @@ button {
 
 @media (max-width: 640px) {
   body { cursor: auto; }
-  .cursor, .cursor-dot { display: none; }
+  .cursor { display: none; }
   button, a { cursor: pointer; }
   .work-grid { grid-template-columns: 1fr; }
   .work-card, .work-card.large { grid-column: span 1; }

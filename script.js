@@ -60,36 +60,56 @@
   }
 
   // ============================
-  //  CUSTOM CURSOR
+  //  CUSTOM CURSOR (arrow + pointer)
   // ============================
   const cursor = document.getElementById('cursor');
-  const cursorDot = document.getElementById('cursorDot');
+  const isDesktop = window.matchMedia('(min-width: 641px) and (pointer: fine)').matches;
 
-  if (cursor && cursorDot && window.matchMedia('(min-width: 641px)').matches) {
+  if (cursor && isDesktop) {
     let mouseX = window.innerWidth / 2;
     let mouseY = window.innerHeight / 2;
-    let cursorX = mouseX;
-    let cursorY = mouseY;
+    let cx = mouseX;
+    let cy = mouseY;
+    let visible = false;
 
+    // Show cursor only after first move so it doesn't flash at center on load
     document.addEventListener('mousemove', (e) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      cursorDot.style.transform = `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+      if (!visible) {
+        cursor.style.opacity = '1';
+        cx = mouseX; cy = mouseY;
+        visible = true;
+      }
     });
 
-    const animateCursor = () => {
-      cursorX += (mouseX - cursorX) * 0.18;
-      cursorY += (mouseY - cursorY) * 0.18;
-      cursor.style.transform = `translate(${cursorX}px, ${cursorY}px) translate(-50%, -50%)`;
-      requestAnimationFrame(animateCursor);
+    document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+    document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; });
+
+    // Click feedback
+    document.addEventListener('mousedown', () => cursor.classList.add('down'));
+    document.addEventListener('mouseup',   () => cursor.classList.remove('down'));
+
+    const tick = () => {
+      // Smooth follow
+      cx += (mouseX - cx) * 0.22;
+      cy += (mouseY - cy) * 0.22;
+      cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+      requestAnimationFrame(tick);
     };
-    animateCursor();
+    cursor.style.opacity = '0';
+    tick();
 
     // Hover state on interactive elements
-    document.querySelectorAll('a, button, .work-card, .service-card, .play-btn').forEach((el) => {
+    const hoverables = 'a, button, .work-card, .service-card, .play-btn, [data-tilt], input, textarea, select';
+    document.querySelectorAll(hoverables).forEach((el) => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
+  } else if (cursor) {
+    // Mobile / touch: hide custom cursor and restore native one
+    cursor.style.display = 'none';
+    document.body.style.cursor = 'auto';
   }
 
   // ============================
