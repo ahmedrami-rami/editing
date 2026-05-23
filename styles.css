@@ -528,6 +528,56 @@ button {
   margin-bottom: 80px;
 }
 
+/* ---- Vertical (9:16) showcase grid for portrait videos ---- */
+.work-grid-v {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.work-card-v {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.work-media-v {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: #0a0a0a;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--line);
+  transition: transform 0.6s var(--ease), box-shadow 0.6s var(--ease);
+}
+
+.work-media-v::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.work-card-v:hover .work-media-v {
+  transform: translateY(-6px);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(57, 255, 20, 0.25);
+}
+
+.work-media-v iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
 .work-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -961,6 +1011,8 @@ button {
   .work-card { grid-column: span 2; }
   .work-card.large { grid-column: span 2; }
   .work-card.large .work-media { aspect-ratio: 16 / 10; }
+  .work-grid-v { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .work-grid-v .work-card-v:nth-child(3) { grid-column: span 2; max-width: 60%; margin: 0 auto; }
   .services-grid { grid-template-columns: 1fr 1fr; }
   .about-grid { grid-template-columns: 1fr; gap: 60px; }
   .showreel-frame { width: calc(85% + 15% * var(--p)); }
@@ -972,6 +1024,8 @@ button {
   button, a { cursor: pointer; }
   .work-grid { grid-template-columns: 1fr; }
   .work-card, .work-card.large { grid-column: span 1; }
+  .work-grid-v { grid-template-columns: 1fr; gap: 28px; }
+  .work-grid-v .work-card-v:nth-child(3) { max-width: 100%; }
   .services-grid { grid-template-columns: 1fr; }
   .nav-cta { display: none; }
   .footer-inner { flex-direction: column; gap: 8px; text-align: center; }

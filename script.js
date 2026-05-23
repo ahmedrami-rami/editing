@@ -101,7 +101,7 @@
     tick();
 
     // Hover state on interactive elements
-    const hoverables = 'a, button, .work-card, .service-card, .play-btn, [data-tilt], input, textarea, select';
+    const hoverables = 'a, button, .work-card, .work-card-v, .service-card, .play-btn, [data-tilt], iframe, input, textarea, select';
     document.querySelectorAll(hoverables).forEach((el) => {
       el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
       el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
